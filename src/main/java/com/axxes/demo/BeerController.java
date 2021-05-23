@@ -33,9 +33,15 @@ public class BeerController {
         return res.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/api/beer")
-    public List<MinimalBeer> search(@RequestParam("q") final String query) {
-        return beerService.searchByName(query).stream().map(this::maptoMinimal).collect(Collectors.toList());
+    @GetMapping("/api/beer/search")
+    public ResponseEntity<List<MinimalBeer>> search(@RequestParam("q") final String query) {
+        final List<MinimalBeer> searchResult = beerService.searchByName(query).stream().map(this::maptoMinimal).collect(Collectors.toList());
+
+        if (searchResult.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(searchResult);
     }
 
     private MinimalBeer maptoMinimal(final Beer beer) {
