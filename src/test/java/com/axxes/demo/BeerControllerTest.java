@@ -10,8 +10,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(value = MockRestController.class)
-class MockRestControllerTest {
+@WebMvcTest(value = BeerController.class)
+class BeerControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -20,11 +20,17 @@ class MockRestControllerTest {
     private BeerService beerService;
 
     @Test
-    void getAll() throws Exception {}
+    void getAll() {}
 
     @Test
-    void getOne() throws Exception {}
+    void getOne() {}
 
     @Test
-    void getOne_notFound() throws Exception {}
+    void getOne_notFound() {}
+
+    @Test
+    void search() {}
+
+    @Test
+    void search_notFound() {}
 }

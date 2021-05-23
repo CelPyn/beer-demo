@@ -2,7 +2,7 @@ package com.axxes.demo;
 
 import org.junit.jupiter.api.Test;
 
-public class MockRestControllerIT {
+public class BeerControllerIT {
 
     @Test
     void getAll() {
@@ -16,6 +16,16 @@ public class MockRestControllerIT {
 
     @Test
     void getOne_notFound() {
+
+    }
+
+    @Test
+    void search() {
+
+    }
+
+    @Test
+    void search_notFound() {
 
     }
 }

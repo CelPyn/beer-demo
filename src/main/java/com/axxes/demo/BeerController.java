@@ -1,35 +1,44 @@
 package com.axxes.demo;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.axxes.demo.domain.Beer;
 import com.axxes.demo.domain.MinimalBeer;
 import com.axxes.demo.service.BeerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @RestController
-public class MockRestController {
+public class BeerController {
 
     private final BeerService beerService;
 
-    public MockRestController(final BeerService beerService) {
+    public BeerController(final BeerService beerService) {
         this.beerService = beerService;
     }
 
     @GetMapping("/api/beer")
     public List<MinimalBeer> getAll() {
-        return beerService.getBeers().stream().map(beer -> new MinimalBeer(beer.getId(), beer.getName())).collect(Collectors.toList());
+        return beerService.getBeers().stream().map(this::maptoMinimal).collect(Collectors.toList());
     }
 
     @GetMapping("/api/beer/{id}")
     public ResponseEntity<Beer> getOne(@PathVariable("id") final int id) {
-        final Optional<Beer> res = beerService.getBeers().stream().filter(beer -> beer.getId() == id).findFirst();
-
+        final Optional<Beer> res = beerService.findById(id);
         return res.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/api/beer")
+    public List<MinimalBeer> search(@RequestParam("q") final String query) {
+        return beerService.searchByName(query).stream().map(this::maptoMinimal).collect(Collectors.toList());
+    }
+
+    private MinimalBeer maptoMinimal(final Beer beer) {
+        return new MinimalBeer(beer.getId(), beer.getName());
     }
 }
